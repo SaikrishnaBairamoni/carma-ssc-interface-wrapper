@@ -108,7 +108,7 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
     
 
 
-    colcon build --packages-up-to ssc_interface_wrapper_ros2 pacmod3-msgs kvaser-interface --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release
+    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install_ros2 
     
     # Get the exit code from the ROS2 build
     status=$?
