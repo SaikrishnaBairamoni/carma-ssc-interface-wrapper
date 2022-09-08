@@ -72,7 +72,9 @@ if [ $build_ros1_pkgs -eq 1 ]; then
     sudo apt-get install ros-noetic-pacmod-msgs
     
 
-    sudo apt-get install python3-catkin-pkg
+    #sudo apt-get install python3-catkin-pkg
+    sudo apt install python3-catkin-pkg catkin
+    sudo apt-get install python3-catkin-tools
     colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
     chmod -R ugo+x /opt/carma/install
     unset ROS_LANG_DISABLE
@@ -105,8 +107,9 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
     #sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
     #sudo apt update
     #sudo apt install ros-$ROS_DISTRO-kvaser-interface
-    
-    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --packages-up-to ssc_interface_wrapper_ros2 --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install_ros2 
+    sudo apt update
+    sudo apt install python3-catkin-pkg catkin
+    colcon build --packages-up-to ssc_interface_wrapper_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install_ros2 
     
     # Get the exit code from the ROS2 build
     status=$?
