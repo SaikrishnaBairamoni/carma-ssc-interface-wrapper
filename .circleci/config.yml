@@ -51,6 +51,8 @@ jobs:
             source ${INIT_ENV}
             sudo chmod +x ./src/CARMASscInterfaceWrapper/docker/checkout.bash
             sudo chmod +x ./src/CARMASscInterfaceWrapper/docker/install.sh
+            ./src/CARMASscInterfaceWrapper/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
+            ./src/CARMASscInterfaceWrapper/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
       - run:
           name: Build Driver
