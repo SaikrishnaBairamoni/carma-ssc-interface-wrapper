@@ -70,6 +70,7 @@ if [ $build_ros1_pkgs -eq 1 ]; then
 
     rosdep install --from-paths src --ignore-src -r -y
     sudo apt-get install ros-noetic-pacmod-msgs
+    
 
     sudo apt-get install python3-catkin-pkg
     colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
@@ -96,10 +97,18 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
     sudo apt-get install ros-foxy-pacmod3-msgs
     sudo apt-get install -y ros-foxy-pacmod3
     sudo apt-get install -y ros-foxy-kvaser-interface
+    sudo apt install apt-transport-https
+    sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
+    sudo apt update
+    sudo apt install ros-$ROS_DISTRO-pacmod3-msgs  
+    sudo apt install apt-transport-https
+    sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
+    sudo apt update
+    sudo apt install ros-$ROS_DISTRO-kvaser-interface
     
 
 
-    colcon build --packages-up-to ssc_interface_wrapper_ros2 ros-foxy-pacmod3-msgs pacmod3 ros-foxy-kvaser-interface --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release
+    colcon build --packages-up-to ssc_interface_wrapper_ros2 pacmod3-msgs kvaser-interface --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install_ros2 --cmake-args -DCMAKE_BUILD_TYPE=Release
     
     # Get the exit code from the ROS2 build
     status=$?
