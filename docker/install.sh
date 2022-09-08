@@ -70,6 +70,10 @@ if [ $build_ros1_pkgs -eq 1 ]; then
 
     rosdep install --from-paths src --ignore-src -r -y
     sudo apt-get install ros-noetic-pacmod-msgs
+    sudo apt install apt-transport-https
+    sudo sh -c 'echo "deb [trusted=yes] https://s3.amazonaws.com/autonomoustuff-repo/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/autonomoustuff-public.list'
+    sudo apt update
+    sudo apt install ros-$ROS_DISTRO-pacmod2
 
     sudo apt-get install python3-catkin-pkg
     colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base /opt/carma/install
