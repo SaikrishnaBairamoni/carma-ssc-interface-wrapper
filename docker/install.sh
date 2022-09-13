@@ -93,7 +93,8 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
 
     cd ~/workspace_ros2
     echo "ROS2 build"
-    source /opt/ros/foxy/setup.bash
+    source /opt/AutowareAuto/setup.bash
+    source /opt/carma/install_ros2/setup.bash
     source /opt/autoware.ai/ros/install_ros2/setup.bash
     sudo apt-get update
     sudo apt-get install -y apt-utils
@@ -111,7 +112,7 @@ elif [ $build_ros2_pkgs -eq 1 ]; then
     #sudo apt install ros-$ROS_DISTRO-kvaser-interface
     sudo apt update
     #sudo apt install python3-catkin-pkg catkin
-    colcon build --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface --cmake-args -DCMAKE_BUILD_TYPE=Release --build-base ./build_ssc_interface_wrapper --install-base /opt/carma/install_ros2 
+    colcon build --packages-up-to ssc_interface_wrapper_ros2 pacmod3 kvaser_interface --cmake-args -DCMAKE_BUILD_TYPE=Release  --install-base /opt/carma/install_ros2 
     
     # Get the exit code from the ROS2 build
     status=$?
