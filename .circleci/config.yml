@@ -55,8 +55,8 @@ jobs:
             sudo chmod +x ./src/CARMASscInterfaceWrapper/docker/install.sh
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
             sudo apt-get update
-            ./src/CARMASscInterfaceWrapper/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY} -r ${PWD}
-            ./src/CARMASscInterfaceWrapper/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY} -r ${PWD}
+            #./src/CARMASscInterfaceWrapper/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY} -r ${PWD}
+            #./src/CARMASscInterfaceWrapper/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY} -r ${PWD}
       - run:
           name: Build Driver
           command: |
