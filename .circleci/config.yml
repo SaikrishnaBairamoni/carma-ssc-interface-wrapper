@@ -51,6 +51,17 @@ jobs:
           command: |
             source ${INIT_ENV}
             source ${ROS_2_ENV}
+            mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
+            --chown=carma . /home/carma/workspace_ros1/src/
+            chmod -R u+x ~/workspace_ros1/src/docker/
+            ~/workspace_ros1/src/docker/checkout.bash -ros1
+
+            # ROS2 checkout deps
+            --chown=carma . /home/carma/workspace_ros2/src/
+            --chown=carma . /home/carma/workspace_ros2/src/
+            chmod -R u+x ~/workspace_ros2/src/docker/
+            ~/workspace_ros2/src/docker/checkout.bash -ros2
+
             sudo chmod +x ./src/CARMASscInterfaceWrapper/docker/checkout.bash
             sudo chmod +x ./src/CARMASscInterfaceWrapper/docker/install.sh
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
