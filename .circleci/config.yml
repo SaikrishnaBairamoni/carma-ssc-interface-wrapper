@@ -50,24 +50,24 @@ jobs:
           command: |
             #source ${INIT_ENV}
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
-            mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
-            cp --chown=carma . /home/carma/workspace_ros1/src/
+            mkdir -p ./workspace_ros1/src ~/workspace_ros2/src
+            cp . /home/carma/workspace_ros1/src/
             chmod -R u+x ~/workspace_ros1/src/docker/
-            ~/workspace_ros1/src/docker/checkout.bash -ros1
+            ./workspace_ros1/src/docker/checkout.bash -ros1
       - run:
           name: ROS2 checkout deps
           command: |
             #source ${INIT_ENV}
-            cp --chown=carma . /home/carma/workspace_ros2/src/
-            cp --chown=carma . /home/carma/workspace_ros2/src/
+            cp . /home/carma/workspace_ros2/src/
+            cp . /home/carma/workspace_ros2/src/
             chmod -R u+x ~/workspace_ros2/src/docker/
-            ~/workspace_ros2/src/docker/checkout.bash -ros2
+            ./workspace_ros2/src/docker/checkout.bash -ros2
             #Install ssc_pm_lexus
-            ~/workspace_ros1/src/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
+            ./workspace_ros1/src/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
             # Build ros1 pkgs
-            ~/workspace_ros1/src/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
+            ./workspace_ros1/src/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
             #Build ros2 pkgs
-            ~/workspace_ros2/src/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}            
+            ./workspace_ros2/src/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}            
       #- run:
           #name: Install dependencies
           #command: |
