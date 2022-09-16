@@ -51,15 +51,15 @@ jobs:
             #source ${INIT_ENV}
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
             mkdir -p ./workspace_ros1/src ~/workspace_ros2/src
-            cp . /home/carma/workspace_ros1/src/
+            cp -r . /home/carma/workspace_ros1/src/
             chmod -R u+x ~/workspace_ros1/src/docker/
             ./workspace_ros1/src/docker/checkout.bash -ros1
       - run:
           name: ROS2 checkout deps
           command: |
             #source ${INIT_ENV}
-            cp . /home/carma/workspace_ros2/src/
-            cp . /home/carma/workspace_ros2/src/
+            cp -r . /home/carma/workspace_ros2/src/
+            cp -r . /home/carma/workspace_ros2/src/
             chmod -R u+x ~/workspace_ros2/src/docker/
             ./workspace_ros2/src/docker/checkout.bash -ros2
             #Install ssc_pm_lexus
