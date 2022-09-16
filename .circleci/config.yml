@@ -57,7 +57,7 @@ jobs:
             cd src
             git clone --depth=1 https://github.com/usdot-fhwa-stol/carma-utils.git --branch develop
             git clone --depth=1 https://github.com/usdot-fhwa-stol/carma-msgs.git --branch develop
-            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
+            ./CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
       - run:
           name: Install dependencies
           command: |
