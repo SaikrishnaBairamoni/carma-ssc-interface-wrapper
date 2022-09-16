@@ -33,7 +33,6 @@ jobs:
         environment:
           TERM: xterm # use xterm to get full display output from build
           INIT_ENV: /home/carma/.base-image/init-env.sh
-          ROS_2_ENV: /opt/autoware.ai/ros/install_ros2/setup.bash
     working_directory: "/opt/carma/"
     # Execution steps
     steps:
@@ -41,7 +40,6 @@ jobs:
           name: Create src folder
           command: |
             source ${INIT_ENV}
-            source ${ROS_2_ENV}
             mkdir src
             cd src
             mkdir CARMASscInterfaceWrapper
@@ -56,15 +54,14 @@ jobs:
           name: Checkout dependancies
           command: |
             source ${INIT_ENV}
-            source ${ROS_2_ENV}
             cd src
             git clone --depth=1 https://github.com/usdot-fhwa-stol/carma-utils.git --branch develop
             git clone --depth=1 https://github.com/usdot-fhwa-stol/carma-msgs.git --branch develop
+            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
       - run:
           name: Install dependencies
           command: |
             source ${INIT_ENV}
-            source ${ROS_2_ENV}
             rosdep install --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y            
       - run:
           name: Build Driver
