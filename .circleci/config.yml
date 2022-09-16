@@ -33,7 +33,6 @@ jobs:
         environment:
           TERM: xterm # use xterm to get full display output from build
           INIT_ENV: /home/carma/.base-image/init-env.sh
-          ROS_2_ENV: /opt/autoware.ai/ros/install_ros2/setup.bash
     working_directory: "/opt/carma/"
     # Execution steps
     steps:
@@ -62,14 +61,12 @@ jobs:
           name: Build Driver
           command: |
             source ${INIT_ENV}
-            source ${ROS_2_ENV}
             export ROS_PARALLEL_JOBS='-j1 -l1'
             build-wrapper-linux-x86-64 --out-dir /opt/carma/bw-output bash make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
       - run:
           name: Run C++ Tests
           command: |
             source ${INIT_ENV}
-            source ${ROS_2_ENV}
             export ROS_PARALLEL_JOBS='-j1 -l1'
             bash make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov
       # Run SonarCloud analysis
