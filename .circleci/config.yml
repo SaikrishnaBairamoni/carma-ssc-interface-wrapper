@@ -33,6 +33,7 @@ jobs:
         environment:
           TERM: xterm # use xterm to get full display output from build
           INIT_ENV: /home/carma/.base-image/init-env.sh
+          ROS_2_ENV: /opt/autoware.ai/ros/install_ros2/setup.bash
     working_directory: "/opt/carma/"
     # Execution steps
     steps:
@@ -40,20 +41,22 @@ jobs:
           name: Create src folder
           command: |
             source ${INIT_ENV}
+            source ${ROS_2_ENV}
             mkdir src
             cd src
             mkdir CARMASscInterfaceWrapper
       - checkout:
           path: src/CARMASscInterfaceWrapper
-      - run: 
-          name: Pull Deps
-          command: |
-            source ${INIT_ENV}
-            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
+      #- run: 
+          #name: Pull Deps
+          #command: |
+            #source ${INIT_ENV}
+            #./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
       - run:
           name: Checkout dependancies
           command: |
             source ${INIT_ENV}
+            source ${ROS_2_ENV}
             cd src
             git clone --depth=1 https://github.com/usdot-fhwa-stol/carma-utils.git --branch develop
             git clone --depth=1 https://github.com/usdot-fhwa-stol/carma-msgs.git --branch develop
@@ -61,17 +64,20 @@ jobs:
           name: Install dependencies
           command: |
             source ${INIT_ENV}
+            source ${ROS_2_ENV}
             rosdep install --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y            
       - run:
           name: Build Driver
           command: |
             source ${INIT_ENV}
+            source ${ROS_2_ENV}
             export ROS_PARALLEL_JOBS='-j1 -l1'
             build-wrapper-linux-x86-64 --out-dir /opt/carma/bw-output bash make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
       - run:
           name: Run C++ Tests
           command: |
             source ${INIT_ENV}
+            source ${ROS_2_ENV}
             export ROS_PARALLEL_JOBS='-j1 -l1'
             bash make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov
       # Run SonarCloud analysis
@@ -88,6 +94,7 @@ jobs:
           name: Run Sonar Scanner
           command: |
             source ${INIT_ENV}
+            source ${ROS_2_ENV}
             if [ -z "${CIRCLE_PULL_REQUEST}" ]; then
               echo "Non-PR Build Detected. Running analysis on ${CIRCLE_BRANCH}"
               cd src/CARMASscInterfaceWrapper
