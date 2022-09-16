@@ -45,36 +45,44 @@ jobs:
             mkdir CARMASscInterfaceWrapper
       - checkout:
           path: src/CARMASscInterfaceWrapper
-      #- run: 
-          #name: Pull Deps
+      - run: 
+          name: ROS1 checkout deps
+          command: |
+            #source ${INIT_ENV}
+            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
+            mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
+            cp --chown=carma . /home/carma/workspace_ros1/src/
+            chmod -R u+x ~/workspace_ros1/src/docker/
+            ~/workspace_ros1/src/docker/checkout.bash -ros1
+      - run:
+          name: ROS2 checkout deps
+          command: |
+            #source ${INIT_ENV}
+            cp --chown=carma . /home/carma/workspace_ros2/src/
+            cp --chown=carma . /home/carma/workspace_ros2/src/
+            chmod -R u+x ~/workspace_ros2/src/docker/
+            ~/workspace_ros2/src/docker/checkout.bash -ros2
+            #Install ssc_pm_lexus
+            ~/workspace_ros1/src/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
+            # Build ros1 pkgs
+            ~/workspace_ros1/src/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
+            #Build ros2 pkgs
+            ~/workspace_ros2/src/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}            
+      #- run:
+          #name: Install dependencies
           #command: |
             #source ${INIT_ENV}
-            #./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
-      - run:
-          name: Checkout dependancies
-          command: |
-            source ${INIT_ENV}
-            cd src
-            git clone --depth=1 https://github.com/usdot-fhwa-stol/carma-utils.git --branch develop
-            git clone --depth=1 https://github.com/usdot-fhwa-stol/carma-msgs.git --branch develop
-            ./CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
-      - run:
-          name: Install dependencies
-          command: |
-            source ${INIT_ENV}
-            rosdep install --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y            
+            #rosdep install --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y            
       - run:
           name: Build Driver
           command: |
             source ${INIT_ENV}
-            source ${ROS_2_ENV}
             export ROS_PARALLEL_JOBS='-j1 -l1'
             build-wrapper-linux-x86-64 --out-dir /opt/carma/bw-output bash make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
       - run:
           name: Run C++ Tests
           command: |
             source ${INIT_ENV}
-            source ${ROS_2_ENV}
             export ROS_PARALLEL_JOBS='-j1 -l1'
             bash make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov
       # Run SonarCloud analysis
@@ -91,7 +99,6 @@ jobs:
           name: Run Sonar Scanner
           command: |
             source ${INIT_ENV}
-            source ${ROS_2_ENV}
             if [ -z "${CIRCLE_PULL_REQUEST}" ]; then
               echo "Non-PR Build Detected. Running analysis on ${CIRCLE_BRANCH}"
               cd src/CARMASscInterfaceWrapper
