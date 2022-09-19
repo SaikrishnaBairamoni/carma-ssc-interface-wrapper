@@ -51,7 +51,7 @@ jobs:
             #source ${INIT_ENV}
             apt-get install sudo chown chmod
             sudo apt-get update && sudo apt-get upgrade
-            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
+            #./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
             mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
             ls -la
             pwd
