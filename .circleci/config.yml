@@ -49,13 +49,12 @@ jobs:
           name: ROS1 checkout deps
           command: |
             source ${INIT_ENV}
-            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
-            apt-get update 
             apt-get install sudo chown chmod
+            sudo apt-get update && sudo apt-get upgrade
+            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
             mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
             ls -la
             pwd
-            sudo rm /var/lib/apt/lists/lock
             cp -r --chown=carma . /home/carma/workspace_ros1/src/
             chmod -R u+x ~/workspace_ros1/src/docker/
             ./workspace_ros1/src/docker/checkout.bash -ros1
