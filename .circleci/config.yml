@@ -50,7 +50,7 @@ jobs:
           name: Checkout dependancies
           command: |
             source ${INIT_ENV}
-            ./src/CARMAVelodyneLidarDriver/docker/checkout.bash -r ${PWD}
+            ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
             cd src
             git clone --depth=1 https://github.com/usdot-fhwa-stol/carma-utils.git --branch develop
             git clone --depth=1 https://github.com/usdot-fhwa-stol/carma-msgs.git --branch develop
