@@ -59,8 +59,13 @@ jobs:
           command: |
             source ${INIT_ENV}
             rosdep update
-            rosdep install --from-paths src --ignore-src -r -y
-            #rosdep install --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y          
+            rosdep install dbw_pacifica_msgs
+            rosdep install pacmod3
+            rosdep install libas-common
+            rosdep install carma_planning_msgs
+            rosdep install libas-common
+            #rosdep install --from-paths src --ignore-src -r -y
+            rosdep install --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y          
       - run:
           name: Build Driver
           command: |
