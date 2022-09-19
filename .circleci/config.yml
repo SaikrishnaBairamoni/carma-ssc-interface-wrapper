@@ -58,7 +58,9 @@ jobs:
           name: Install dependencies
           command: |
             source ${INIT_ENV}
-            rosdep install --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y          
+            rosdep update
+            rosdep install --from-paths /home/carma/base-image/workspace/src --ignore-src -r -y
+            #rosdep install --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y          
       - run:
           name: Build Driver
           command: |
