@@ -33,6 +33,7 @@ jobs:
         environment:
           TERM: xterm # use xterm to get full display output from build
           INIT_ENV: /home/carma/.base-image/init-env.sh
+          ROS_2_ENV: /opt/autoware.ai/ros/install_ros2/setup.bash
     working_directory: "/opt/carma/"
     # Execution steps
     steps:
@@ -44,40 +45,12 @@ jobs:
             cd src
             mkdir CARMASscInterfaceWrapper
       - checkout:
-          path: src/CARMASscInterfaceWrapper
-      - run: 
-          name: ROS1 checkout deps
-          command: |
-            #source ${INIT_ENV}
-            apt-get install sudo chown chmod
-            sudo apt-get update && sudo apt-get upgrade
-            #./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
-            sudo mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
-            ls -la
-            pwd
-            sudo apt-get update && sudo apt-get upgrade
-            sudo cp -r --chown=carma . /home/carma/workspace_ros1/src/
-            sudo chmod -R u+x ~/workspace_ros1/src/docker/
-            sudo ./workspace_ros1/src/docker/checkout.bash -ros1
+          path: src/CARMASscInterfaceWrapper           
       - run:
-          name: ROS2 checkout deps
+          name: Install dependencies
           command: |
-            #source ${INIT_ENV}
-            cp -r --chown=carma . /home/carma/workspace_ros2/src/
-            cp -r --chown=carma . /home/carma/workspace_ros2/src/
-            chmod -R u+x ~/workspace_ros2/src/docker/
-            ./workspace_ros2/src/docker/checkout.bash -ros2
-            #Install ssc_pm_lexus
-            ./workspace_ros1/src/docker/install.sh ${ACCESS_ID} ${SECRET_KEY}
-            # Build ros1 pkgs
-            ./workspace_ros1/src/docker/install.sh -ros1 ${ACCESS_ID} ${SECRET_KEY}
-            #Build ros2 pkgs
-            ./workspace_ros2/src/docker/install.sh -ros2 ${ACCESS_ID} ${SECRET_KEY}            
-      #- run:
-          #name: Install dependencies
-          #command: |
-            #source ${INIT_ENV}
-            #rosdep install --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y            
+            source ${INIT_ENV}
+            rosdep install --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y            
       - run:
           name: Build Driver
           command: |
@@ -90,6 +63,25 @@ jobs:
             source ${INIT_ENV}
             export ROS_PARALLEL_JOBS='-j1 -l1'
             bash make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov
+      - run:
+          name: Cleanup before ROS 2 build
+          # Clear the build and install folders before building ROS 2 
+          # but leave the build-wrapper output intact
+          command: |
+            rm -rf /opt/carma/install
+            rm -rf /opt/carma/build
+      - run:
+          name: Build CARMA ROS 2
+          command: |
+            source ${INIT_ENV}
+            source ${ROS_2_ENV}
+            build-wrapper-linux-x86-64 --out-dir /opt/carma/bw-output bash make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
+      - run:
+          name: Run C++ Tests ROS 2
+          command: |
+            source ${INIT_ENV}
+            source ${ROS_2_ENV}
+            bash make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov            
       # Run SonarCloud analysis
       # PR Branchs and number extracted from Circle variables and github api
       # Circle CI seems to make a change to the base branch, so we must fetch --force to ensure correct git file change stats
@@ -121,4 +113,9 @@ jobs:
             cd src/CARMASscInterfaceWrapper
             git fetch --force origin ${TARGET_BRANCH}:${TARGET_BRANCH}
             sonar-scanner -Dproject.settings=.sonarqube/sonar-scanner.properties -Dsonar.login=${SONAR_SCANNER_TOKEN} -Dsonar.pullrequest.base=${TARGET_BRANCH} -Dsonar.pullrequest.branch=${CIRCLE_BRANCH} -Dsonar.pullrequest.key=${PR_NUM}
+
+      - store_test_results:
+          path: ~/junit
+      - store_artifacts:
+          path: /reports
            
