@@ -55,6 +55,7 @@ jobs:
             mkdir -p ~/workspace_ros1/src ~/workspace_ros2/src
             ls -la
             pwd
+            sudo rm /var/lib/dpkg/lock && sudo rm /var/lib/apt/lists/lock
             cp -r --chown=carma . /home/carma/workspace_ros1/src/
             chmod -R u+x ~/workspace_ros1/src/docker/
             ./workspace_ros1/src/docker/checkout.bash -ros1
