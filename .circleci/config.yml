@@ -65,11 +65,10 @@ jobs:
             #rosdep install libas-common
             #rosdep install carma_planning_msgs
             #rosdep install libas-common
-            sudo apt-get install ros-noetic-ardrone-autonomy
-            sudo apt-get install ros-noetic-ardrone-autonomy
-            sudo apt-get install ros-noetic-ardrone-autonomy
-            sudo apt-get install ros-noetic-ardrone-autonomy
-            sudo apt-get install ros-noetic-ardrone-autonomy   
+            sudo apt-get install ros-noetic-dbw_pacifica_msgs
+            sudo apt-get install ros-noetic-pacmod3
+            sudo apt-get install ros-noetic-libas-common
+            sudo apt-get install ros-noetic-carma_planning_msgs 
             #rosdep install --from-paths src --ignore-src -r -y
             rosdep install --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y          
       - run:
