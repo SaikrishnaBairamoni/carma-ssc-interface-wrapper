@@ -59,7 +59,7 @@ jobs:
           command: |
             source ${INIT_ENV}
             rosdep update
-            #export ROS_PACKAGE_PATH=/home/clyde/ros2/orca_ws/install/orca_base/share:$ROS_PACKAGE_PATH
+            export ROS_PACKAGE_PATH=/home/clyde/ros2/orca_ws/install/orca_base/share:$ROS_PACKAGE_PATH
             #rosdep install dbw_pacifica_msgs
             #rosdep install pacmod3
             #rosdep install libas-common
