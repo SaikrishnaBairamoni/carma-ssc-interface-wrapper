@@ -53,24 +53,7 @@ jobs:
             ./src/CARMASscInterfaceWrapper/docker/checkout.bash -r ${PWD}
             cd src
             git clone --depth=1 https://github.com/usdot-fhwa-stol/carma-utils.git --branch develop
-            git clone --depth=1 https://github.com/usdot-fhwa-stol/carma-msgs.git --branch develop
-      - run:
-          name: Install dependencies
-          command: |
-            source ${INIT_ENV}
-            rosdep update
-            export ROS_PACKAGE_PATH=/home/carma/.ros/rosdep/:$ROS_PACKAGE_PATH
-            #rosdep install dbw_pacifica_msgs
-            #rosdep install pacmod3
-            #rosdep install libas-common
-            #rosdep install carma_planning_msgs
-            #rosdep install libas-common
-            sudo apt-get install ros-noetic-dbw_pacifica_msgs
-            sudo apt-get install ros-noetic-pacmod3
-            sudo apt-get install ros-noetic-libas-common
-            sudo apt-get install ros-noetic-carma_planning_msgs 
-            #rosdep install --from-paths src --ignore-src -r -y
-            rosdep install --from-paths /opt/carma/src/CARMASscInterfaceWrapper --ignore-src -y          
+            git clone --depth=1 https://github.com/usdot-fhwa-stol/carma-msgs.git --branch develop        
       - run:
           name: Build Driver
           command: |
